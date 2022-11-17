@@ -1,0 +1,36 @@
+//Borrar por id
+DELETE   http://localhost:4000/api/productos/2 HTTP/1.1
+content-type: application/json
+
+{
+
+}
+
+
+
+# //agregar elementos
+# POST  http://localhost:4000/api/productos HTTP/1.1
+# content-type: application/json
+
+# {
+#  "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_2X_705097-MLA45043489158_032021-F.webp",
+#     "title": "NVIDIA 3090",
+#     "price": "20022222"
+# }
+
+
+
+
+
+
+//Modificar por ID
+# PUT  http://localhost:4000/api/productos/9 HTTP/1.1
+# content-type: application/json
+
+# {
+#  "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_2X_705097-MLA45043489158_032021-F.webp",
+#     "title": "NVIDIA 3090",
+#     "price": "200",
+#     "id": 9
+# }
+

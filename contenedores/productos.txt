@@ -1,0 +1,26 @@
+[
+  {
+    "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_2X_705097-MLA45043489158_032021-F.webp",
+    "title": "NVIDIA 3090",
+    "price": "300",
+    "id": 1
+  },
+  {
+    "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_2X_705097-MLA45043489158_032021-F.webp",
+    "title": "NVIDIA 3060",
+    "price": "200",
+    "id": 2
+  },
+  {
+    "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_2X_705097-MLA45043489158_032021-F.webp",
+    "title": "AMD 5700",
+    "price": "400",
+    "id": 3
+  },
+  {
+    "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_2X_705097-MLA45043489158_032021-F.webp",
+    "title": "AMD 6800XT",
+    "price": "500",
+    "id": 4
+  }
+]
