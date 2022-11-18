@@ -1,5 +1,5 @@
 const express = require("express")
-const http= require("http")
+
 const { Server: ServerHttp } = require('http')
 const app = express()
 const { Server: ServerIo } = require('socket.io')
@@ -15,6 +15,9 @@ const bcrypt = require("bcrypt")
 app.use(express.static(__dirname + '/public'));
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+const dotenv = require("dotenv")
+const  logger  = require("./logger.js")
+dotenv.config() 
 //session
 app.use(express.json())
 const cookieParser = require("cookie-parser")
@@ -24,35 +27,14 @@ const isValidPassword = (user, password) => {
 }
 
 const {contenedorArchivo} = require("./contenedores/contenedorArchivo.js")
-
 const contenedor = new contenedorArchivo("./contenedores/productos.txt")
+// //CLUSTER
+const CLUSTER = require("./modoCluster.js")
 
-//CLUSTER
-const cluster = require("cluster")
-const modoCluster = "CLUSTER"
+const modoCluster = process.argv[2]
+console.log(process.argv[2])
 
-console.log(process.argv[3])
-if(modoCluster === "CLUSTER"){
-    if (cluster.isPrymary) {
-        console.log(`Master ${process.pid} is running`)
-        for (let i = 0; i < numCPUs; i++) {
-            cluster.fork()
-        }
-        cluster.on('exit', (worker, code, signal) => {
-            console.log(`worker ${worker.process.pid} died`)
-            cluster.fork()
-        })
-    }  else {
-        console.log("modo cluster")
-        http.createServer((req, res) => {
-            res.writeHead(200)
-            res.end('hello world')
-        }).listen(8000)
-        
-        console.log(`Worker ${process.pid} started`)
-    }
-}
-// const contenedorMensajes = new Contenedor("./mensajes.json")
+CLUSTER(modoCluster);
 
 app.use(session({
     secret: 'keyboard cat',
@@ -67,29 +49,10 @@ app.use(session({
    }));
 
 
-   //nodemailer
-
-  
-   
-
-
-//  ;(async () => {
-//     try {
-//         const info = await transporter.sendMail(mailOptions)
-//         console.log(info)
-//      } catch (error) {
-//         console.log(err)
-//      }
-// })()
-
-
 //PASSPORT
-
 app.use(passport.initialize())
 app.use(passport.session())
-
 connectdB()
-
 
 //FS SYSTEM
 const routerProductos = require("./Productos/routes/productos.route.js")
@@ -107,8 +70,8 @@ const handlebars = require("express-handlebars")
 
 const twilio = require("twilio")
 
-const accountSid = 'AC05080787475393909d594fc35ef57342'
-const authToken = '5193427a5d01ad188b8beaa2628102c3'
+const accountSid = process.env.accountSid
+const authToken = process.env.authToken
 
 const client = twilio(accountSid, authToken)
 // const options = {
@@ -145,9 +108,6 @@ passport.use('login', new LocalStrategy(
         
           return done(null, false);
         }
-      
-      
- 
         return done(null, user);
     });
     
@@ -164,13 +124,10 @@ passport.use('login', new LocalStrategy(
         
           return done(err);
         }
-   
         if (user) {
             logger.error('User already exists');
-       
           return done(null, false)
         }
-
     let newUser = {
         username,
         password: createHash(password),
@@ -191,9 +148,6 @@ const transporter = createTransport({
        pass: 'ttdkjczkisftsslv'
    }
 });
-
-
-    
 
     Users.create(newUser, (err, userWithId) => {
         if (err) {
@@ -235,7 +189,6 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
     Users.find({id},done)
-    // Users.FindById(id,done)
 })
 
 app.engine(
@@ -453,10 +406,10 @@ console.log(carrito)
 
 app.use("/api/carrito",routerCarrito)
 app.use("/api/productos",routerProductos)
-const dotenv = require("dotenv")
-const  logger  = require("./logger.js")
 
-dotenv.config() 
+
+
+
 const PORT = process.env.PORT || 4000
 serverHttp.listen(PORT,err =>{
     if(err) throw err

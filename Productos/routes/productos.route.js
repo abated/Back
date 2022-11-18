@@ -15,7 +15,6 @@ const {Router}  = express
 const routerProductos = Router()
 
 routerProductos.get("/",checkAuth,getProducts)
-routerProductos.get("/",checkAuth,getProducts)
 routerProductos.get("/:id",getId)
 routerProductos.post("/",postProduct)
 routerProductos.put("/:id",putProduct)
