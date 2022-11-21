@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito</title>
-     <link rel="stylesheet" href="estilos.css">
+   <link rel="stylesheet" href="/estilos.css">
    <script src="../socket.io/socket.io.js"></script>
 </head>
 <body>
@@ -14,7 +14,7 @@
     {{#each carrito}}
     <div class="container">
         <div class="card">
-            <h1>{{title}}</h1>
+            <h1 class="colorRed">{{title}}</h1>
             <h2>{{price}}</h2>
         </div>
     </div>
@@ -24,6 +24,6 @@
 <h3 id="demo" onclick="myFunction()">Click me to change my color.</h3>
     </div>
     <h1><a href="/api/productos">Seguir comprando</a></h1>
-   <script src="/index.js"></script>
+   <script src="/indexCarrito.js"></script>
 </body>
 </html>

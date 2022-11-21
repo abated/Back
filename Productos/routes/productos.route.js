@@ -1,5 +1,5 @@
 const express = require("express")
-const {getProducts,getId,postProduct,putProduct,deleteId} = require("../controllers/productos.controller.js")
+const {getProducts,getId,postProduct,putProduct,deleteId,iniciar,faillogin,failsignup,signup} = require("../controllers/productos.controller.js")
 const checkAuth = (req, res, next) => {
     if (req.isAuthenticated()) {
         next()
@@ -13,7 +13,10 @@ const checkAuth = (req, res, next) => {
 const {Router}  = express
 
 const routerProductos = Router()
-
+routerProductos.get("/signup",signup)
+routerProductos.get("/failsignup",failsignup)
+routerProductos.get("/faillogin",faillogin)
+routerProductos.get("/iniciar",iniciar)
 routerProductos.get("/",checkAuth,getProducts)
 routerProductos.get("/:id",getId)
 routerProductos.post("/",postProduct)

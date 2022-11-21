@@ -15,8 +15,7 @@ const render = (productos) => {
     let html = productos.map(prod => {
         return `
         <li>
-        <form onsubmit="return agregarCarrito${prod.id}(this)" class="mt-5">
-        <span class="nombre" name="title" id="${prod.id}">
+        <span class="nombre" name="title">
         ${prod.title}
         </span>
         <span class="hora" name="price">
@@ -25,7 +24,7 @@ const render = (productos) => {
         <span class="mensaje" name="thumbnail">
         <img src=" ${prod.thumbnail}" alt="">
         </span>
-        <input type="submit" value="Add Product">
+        <button id="btn-${prod.id}" type="submit">Agregar Carrito</button>
 
         </form>
     </li>
@@ -33,48 +32,16 @@ const render = (productos) => {
 
     })
     listado.innerHTML = html.join(" ")
-
-}
-// const render3 = (productos) => {
-//     let listado = document.getElementById("carrito")
-//     // let listado = document.querySelector("#listado")
-//     let html = productos.map(prod => {
-//         return `
-//     nombro:${prod.title}
-    
-//        `
-
-//     })
-//     listado.innerHTML = html.join(" ")
-
-// }
-const agregarCarrito1 = (evento4) => {
-    const productos = { title: "NVIDIA 3091", price: 300 }
-    server.emit("producto-carrito",productos)
-    return false
-}
-const agregarCarrito2 = (evento4) => {
-    const productos = { title: "NVIDIA 3060", price: 200 }
-    server.emit("producto-carrito",productos)
-    return false
-}
-const agregarCarrito3 = (evento4) => {
-    const productos = { title: "AMD 5700", price: 400 }
-    server.emit("producto-carrito",productos)
-    return false
-}
-const agregarCarrito4 = (evento4) => {
-    const productos = { title: "AMD 6800XT", price: 500 }
-    server.emit("producto-carrito",productos)
-    return false
 }
 const render2 = (productos) => {
-    let listado = document.getElementById("mensaje")
+    let listado = document.getElementById("mensajee")
+    // console.log(listado)
+    // console.log("Entre al render2")
+    // console.log(productos)
     // let listado = document.querySelector("#listado")
     let html2 = productos.map(prod => {
         return `
         <li>
-
         <span class="nombre">
         ${prod.nombre}
         </span>
@@ -82,7 +49,7 @@ const render2 = (productos) => {
         [${prod.hora}]:
         </span>
         <span class="mensaje">
-        ${prod.mensaje},${prod.nombre1}
+        ${prod.mensaje},${prod.nombre}
         </span>
     </li>
        `
@@ -91,7 +58,6 @@ const render2 = (productos) => {
 }
 const addUser =(evento3) =>{
     const nombre1 = document.querySelector("#usuario").value
-    
     server.emit("mensaje-nuevo2", nombre1)
     return false
 }
@@ -103,17 +69,10 @@ const addMensaje = (evento2) => {
     const alias = document.querySelector("#alias").value
     const avatar = document.querySelector("#avatar").value
     const mensaje = document.querySelector("#mensaje").value
-    
-    
-    const hora2 = new Date().getTime()
     const hora = formatDate()
     const productos2 = { nombre,nombre1,edad,alias,avatar, mensaje,hora }
-
     server.emit("mensaje-nuevo", productos2)
-    
     return false
-
-
 }
 
 const addProduct = (evento) => {
@@ -124,27 +83,17 @@ const addProduct = (evento) => {
     server.emit("producto-nuevo", productos)
     return false
 }
-function myFunction() {
-    document.getElementById("demo").style.color = "red";
-  }
-function mandarCarrito(params) {
-    console.log("Hola")
-    server.emit("carrito22-servidor", mensaje => {
-        // console.log("Hola")
-        // console.log(mensaje)
-        
-        
-    })
-}
-
-
-
 
 server.on("mensaje-servidor", mensaje => {
-    console.log("Hola")
-    
     render(mensaje.prods)
-    render2(mensaje.mensaje2)
-    
+    render2(mensaje.mensaje3)
+
+})
+server.on("mensaje-servidor2", mensaje => {
+    mensaje.forEach((producto)=>{
+    document.getElementById(`btn-${producto.id}`).addEventListener("click",function(){      
+        server.emit("producto-nuevo3", producto)      
+        })
+    })
 })
 

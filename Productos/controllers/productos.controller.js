@@ -4,6 +4,26 @@ const {ProductosDaoArchivo} = require("../../ProductosDao/ProductosDaoArchivo.js
 const Users = require("../../usuario.model.js")
 const contenedor = new ProductosDaoArchivo("./contenedores/productos.txt")
 
+
+
+const signup = async(req,res = response)=>{
+
+    res.render('signup')
+}
+
+    const failsignup = async(req,res = response)=>{
+
+        res.render('failsignup')
+    }
+
+    const iniciar = async(req,res = response)=>{
+
+        res.render('iniciar')
+    }
+    const faillogin = async(req,res = response)=>{
+        res.render('faillogin')
+    }
+
 const getProducts2 = async(req,res = response)=>{
 
         const productos = await contenedor.getAll()
@@ -95,4 +115,4 @@ const deleteId = async (req,res = response)=>{
         })
     }
 }
-module.exports = {getProducts,getId,postProduct,putProduct,deleteId,getProducts2}
+module.exports = {getProducts,getId,postProduct,putProduct,deleteId,getProducts2,iniciar,faillogin,failsignup,signup}

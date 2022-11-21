@@ -11,7 +11,9 @@
 .MainProductos{
     background-color: #e5d3d3;
 }
-
+.colorRed{
+    color: red;
+}
 .container .card{
     width: 300px;
     height: 430px;

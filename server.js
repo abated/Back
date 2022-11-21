@@ -1,5 +1,4 @@
 const express = require("express")
-
 const { Server: ServerHttp } = require('http')
 const app = express()
 const { Server: ServerIo } = require('socket.io')
@@ -25,12 +24,14 @@ app.use(cookieParser())
 const isValidPassword = (user, password) => {
     return bcrypt.compareSync(password, user.password)
 }
+//contenedor mensajes
+
 
 const {contenedorArchivo} = require("./contenedores/contenedorArchivo.js")
 const contenedor = new contenedorArchivo("./contenedores/productos.txt")
+const contenedorMensajes = new contenedorArchivo("./contenedores/mensajes.txt")
 // //CLUSTER
 const CLUSTER = require("./modoCluster.js")
-
 const modoCluster = process.argv[2]
 console.log(process.argv[2])
 
@@ -47,26 +48,19 @@ app.use(session({
     resave: true,
     saveUninitialized: false
    }));
-
-
 //PASSPORT
 app.use(passport.initialize())
 app.use(passport.session())
 connectdB()
-
 //FS SYSTEM
 const routerProductos = require("./Productos/routes/productos.route.js")
 const routerCarrito = require("./Productos/routes/carrito.route.js")
-
 //MONGO DB
 // const routerProductos = require("./Productos/routes/productos.routeMongoDB.js")
-
 //Firebase
 // const routerProductos = require("./Productos/routes/productos.routeFirebase.js")
 const handlebars = require("express-handlebars")
 //whatsap twilio
-
-
 
 const twilio = require("twilio")
 
@@ -74,21 +68,7 @@ const accountSid = process.env.accountSid
 const authToken = process.env.authToken
 
 const client = twilio(accountSid, authToken)
-// const options = {
-//    body: ` Compraste${carrito} a pedido de`,
-//    mediaUrl: [ 'https://www.chetu.com/img/twilio/partner/twilio-logo.png' ],
-//    from: 'whatsapp:+14155238886',
-//    to: 'whatsapp:+5491151652403'
-// }
-// ;(async () => {
-//    try {
-//        const message = await client.messages.create(options)
-//        console.log(message)
-//    } catch (error) {
-//        console.log(error)
-//    }
-// })()
-//passport MidleWare
+
 passport.use('login', new LocalStrategy(
     (username, password, done) => {
        Users.findOne({ username }, (err, user) => {
@@ -97,15 +77,11 @@ passport.use('login', new LocalStrategy(
           return done(err);
    
         if (!user) {
-         
-          
           logger.error('User Not Found with username ' + username)
           return done(null, false);
         }
-   
         if (!isValidPassword(user, password)) {
             logger.error("Invalid Password")
-        
           return done(null, false);
         }
         return done(null, user);
@@ -113,7 +89,6 @@ passport.use('login', new LocalStrategy(
     
 })
    );
- 
    passport.use('signup', new LocalStrategy({
     passReqToCallback: true
 }, (req, username, password, done) => {
@@ -154,7 +129,6 @@ const transporter = createTransport({
             logger.error('Error in Saving user: ' + err)
           return done(err);
         }
-
         logger.info(user)
       logger.info('User Registration succesful')
 
@@ -181,16 +155,12 @@ const transporter = createTransport({
               bcrypt.genSaltSync(10),
               null);
   }
-   
 passport.serializeUser((user, done) => {
     done(null, user._id)
 })
-
-
 passport.deserializeUser((id, done) => {
     Users.find({id},done)
 })
-
 app.engine(
     'hbs',
     handlebars.engine({
@@ -203,47 +173,29 @@ app.engine(
 app.set('view engine', 'hbs')
 app.set('views', './views')
 //gets login
-app.get('/signup', (req, res) => {
-  
-    res.render('signup')
-})
-
 
 app.get('/login', (req, res) => {
     if (req.isAuthenticated()) {
-       
        let user = req.user
- 
         res.render('index')
     } else {
-       
         let user = req.user
       logger.info("Estoy en el else")
-  
         res.render('login')
     }
 })
-
 app.post('/login', passport.authenticate('login',{
     successRedirect: 'api/productos',
-    failureRedirect: '/faillogin',
-    
+    failureRedirect: 'api/productos/faillogin',
 }),(req, res) => {
   var user = req.user
 })
-
-
 app.post('/signup', passport.authenticate('signup',{
-    successRedirect: '/iniciar',
-    failureRedirect: '/failsignup',
+    successRedirect: 'api/productos/iniciar',
+    failureRedirect: 'api/productos/failsignup',
 }),(req, res) => {
     const { username, password } = req.body
-     
 })
-app.get("/iniciar",(req,res)=>{
-
-    res.render("iniciar")
-    })
 
     const carrito = []
     app.get("/api/carrito2",async(req,res)=>{
@@ -252,22 +204,11 @@ app.get("/iniciar",(req,res)=>{
         const usuariocarrito = {usuario:usuario2.username,email:usuario2.email}
          
 carrito.unshift(usuariocarrito)
-console.log(carrito)
-      
-        
-        
         res.render("carrito",{
-            carrito:carrito
+            carrito:carrito.slice(1)
         })
         })
         
-app.get("/faillogin",(req,res)=>{
-res.render("faillogin")
-})
-app.get("/failsignup",(req,res)=>{
-    res.render("failsignup")
-    })
-
 // logout
 app.get('/logout', (req, res, next) => {
     req.logout((err) => {
@@ -275,9 +216,8 @@ app.get('/logout', (req, res, next) => {
         res.redirect('/login')
     })
 })
-const numCPUs = require('os').cpus().length
-app.get('/info', (req, res) => {
 
+app.get('/info', (req, res) => {
     const numCPUs = require('os').cpus().length
     logger.info(numCPUs)
     logger.warn(numCPUs)
@@ -303,23 +243,24 @@ res.render("info",{
 })
 })
 io.on("connection", async (socket) => {
+    const mensaje3 = []
     logger.warn("Socket On")
     const prods = await contenedor.getAll()
-    // const mensaje2 = await contenedorMensajes.getAllFs()
-
-    console.log(prods)
+    const mensaje2 = await contenedorMensajes.getAll()
+    // console.log(mensaje2)
+    // console.log(prods)
     const mensaje = {
         mensajee: "todo ok",
-        prods
-        // mensaje2,
+        prods,
+        mensaje3
     }
     socket.emit("mensaje-servidor", mensaje)
+    socket.emit("mensaje-servidor2", prods)
     socket.on("mensaje-nuevo", (mensajeChat) => {
-        mensaje2.push(mensajeChat)
-        contenedorMensajes.saveFs(mensajeChat)
+        mensaje3.push(mensajeChat)
+        // contenedorMensajes.saveFs(mensajeChat)
         io.sockets.emit("mensaje-servidor", mensaje)
     })
-
     socket.on("producto-nuevo", (productos) => {
         prods.push(productos)
         contenedor.saveMariaDb(productos)
@@ -327,25 +268,23 @@ io.on("connection", async (socket) => {
     })
     socket.on("mensaje-nuevo2", (usuarios) => {
         arraYusuarios.push(usuarios)
-        console.log(usuarios)
-    
-
     })
-    socket.on("producto-carrito", (carritoProducto) => {
-        console.log("Hola socket")
-       
+    // socket.on("producto-carrito", (carritoProducto) => {
+    //     console.log("Hola socket")
+    // carrito.push(carritoProducto)
+    // })
+    socket.on("producto-nuevo3", (carritoProducto) => {
         console.log(carritoProducto)
-    carrito.push(carritoProducto)
+        carrito.push(carritoProducto)
     })
     socket.on("carrito2-servidor", (array) => {
-        console.log(array)
-       
-        console.log(carritoProducto)
+        // console.log(array)
     carrito.push(carritoProducto)
     })
-    socket.on("carrito22-servidor",async (final)=>{
-        const TEST_MAIL = 'dario.tasa@gmail.com'
 
+    socket.on("carrito22-servidor",async (final)=>{
+        console.log("Recibido")
+        const TEST_MAIL = 'dario.tasa@gmail.com'
         const transporter = createTransport({
            service: 'gmail',
            port: 587,
@@ -357,10 +296,7 @@ io.on("connection", async (socket) => {
         let productosComprados = carrito.map(prod => {
             return `
             se compro${prod.title} a $${prod.price}
-        
-        
            `
-        
         })
         const mailOptions2 = {
             from: 'Nueva compra',
@@ -386,29 +322,18 @@ io.on("connection", async (socket) => {
          }
          transporter.sendMail(mailOptions2)
         transporter.sendMail(mailOptions3)
-        console.log()
-
-console.log(carrito)
-
-
         const options = {
             body: `la persona ${carrito[0].usuario} con el emial ${carrito[0].email} COMPRO${productosComprados} y otras cosas`,
             mediaUrl: [ 'https://www.chetu.com/img/twilio/partner/twilio-logo.png' ],
             from: 'whatsapp:+14155238886',
             to: 'whatsapp:+5491151652403'
          }
-             const message =  await client.messages.create(options)
-             console.log(message)
+        client.messages.create(options)
     })
-
 })
-
 
 app.use("/api/carrito",routerCarrito)
 app.use("/api/productos",routerProductos)
-
-
-
 
 const PORT = process.env.PORT || 4000
 serverHttp.listen(PORT,err =>{
