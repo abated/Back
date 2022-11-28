@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="estilos.css">
+  
+    
+    <title>Document</title>
+</head>
+
+<body>
+
+    <h1>Productos</h1>
+    <h2>{{mensaje}}</h2>
+    <h2><a href="/">AGREGAR MAS PRODUCTOS</a></h2>
+<main class="MainProductos">
+
+
+    {{#if productos}}
+
+
+    {{#each productos}}
+    <div class="container">
+        <div class="card">
+            <img src="{{thumbnail}}" alt="">
+            <h1>{{title}}</h1>
+            <h2>{{price}}</h2>
+            <a href="#">sumar al carrito</a>
+
+        </div>
+
+    </div>
+    {{/each}}
+    {{/if}}
+</main>
+
+    {{!-- {{#if productos}}
+    <ul>
+        {{#each productos}}
+        <li class={{toplaner}}>{{title}} </li>
+        <li class="toplaner">{{price}}</li>
+        <li><img src="{{thumbnail}}" alt=""></li>
+        {{/each}}
+    </ul>
+    {{/if}} --}}
+
+    {{> footer }}
+
+      
+</body>
+
+</html>

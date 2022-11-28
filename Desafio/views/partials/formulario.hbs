@@ -1,0 +1,32 @@
+{{!-- <section>
+    <h2>Formulario</h2>
+    <form action="productos" method="post" >
+        <input type="text" name="title" id="nombre" required="required" placeholder="title">
+        <br>
+        <input type="text" name="thumbnail" id="thumbnail" required="required" placeholder="thumbnail">
+        <br>
+        <input type="number" name="price" id="precio" required="required" placeholder="price">
+        <br>
+        <input type="submit" value="Enviar">
+    </form> --}}
+    <!-- lista  de productos -->
+    
+    <div class="row">
+        <div class="col">
+            <form onsubmit="return addProduct(this)" class="mt-5">
+                <input class="form-control" type="text" required="required" id="nombre" name="title" placeholder="Product">
+                <br>
+                <input class="form-control" type="number" required="required" id="precio" name="price" placeholder="Price">
+                <br>
+                <input class="form-control" type="text" required="required" id="thumbnail" name="thumbnail" placeholder="thumbnail">
+                <input type="submit" value="Add Product">
+            </form>
+
+        </div>
+  
+    </div> 
+
+   
+
+
+    
