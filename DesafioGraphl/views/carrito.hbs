@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito</title>
+   {{!-- <link rel="stylesheet" href="/estilos.css">
+   <script src="../socket.io/socket.io.js"></script> --}}
+</head>
+<body>
+    <h1>este es el carrito</h1>
+ 
+    {{#each carrito}}
+    <div class="container">
+        <div class="card">
+            <h1 class="colorRed">{{title}}</h1>
+            <h2>{{price}}</h2>
+        </div>
+    </div>
+    {{/each}}
+<button onclick="mandarCarrito()">terminar compra</button>
+
+<h3 id="demo" onclick="myFunction()">Click me to change my color.</h3>
+    </div>
+    <h1><a href="/api/productos">Seguir comprando</a></h1>
+   {{!-- <script src="/indexCarrito.js"></script> --}}
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="/estilos.css">
+     <script src="/socket.io/socket.io.js"></script>
+ 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+
+
+    
+     <div id="carrito"></div>
+    <h1 class="color">Esto es el main</h1>
+{{#if arraYusuarios}}
+ {{> usuario }}
+ {{/if}}
+   <h4>hola {{usuarioModelo}}</h4>
+       <form action="/logout" method="GET">
+
+        <button type="submit"> DESLOGEAR</button>
+    </form>
+
+       
+           
+    <h2>{{mensaje}}</h2>
+
+
+    <div>
+<div><h2>Agregar Productos Administrador</h2>
+{{#if administrador}}
+{{> formulario }}
+ {{/if}}
+
+    <ul id="listado">
+        
+    </ul>
+    </div>
+    <h1><a href="/api/carrito2">Ver productos en carrito</a></h1>
+
+
+    </div>
+    ir avatar 
+<a href="{{avatar}}">Link FOTO</a>
+
+
+<div>
+{{> formularioMensajes }}
+{{> mensajes }}
+USUARIO
+{{#each username}}
+USUARIO: {{username}}
+ {{/each}}
+  
+<ul id="mensajee" class="midlaner">
+
+</ul>
+
+</div>
+
+
+
+    {{> footer }}
+
+  
+</body>
+   <script src="/index.js"></script>
+</html>

@@ -1,0 +1,25 @@
+
+
+    <h1>Productos</h1>
+    <h2>{{mensaje}}</h2>
+    <h2><a href="/">AGREGAR MAS PRODUCTOS</a></h2>
+<main class="MainProductos">
+
+
+    {{#if productos}}
+
+
+    {{#each productos}}
+    <div class="container">
+        <div class="card">
+            <img src="{{thumbnail}}" alt="">
+            <h1>{{title}}</h1>
+            <h2>{{price}}</h2>
+            <a href="#">sumar al carrito</a>
+
+        </div>
+
+    </div>
+    {{/each}}
+    {{/if}}
+
